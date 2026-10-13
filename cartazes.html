@@ -19,7 +19,7 @@
   .poster p.sub { font-size: 17pt; color: var(--muted); margin: 0; }
   .qrbox { background: var(--soft); border-radius: 10mm; padding: 10mm; }
   .qr { background: #fff; padding: 6mm; border-radius: 4mm; }
-  .qr img, .qr canvas { display: block; width: 95mm !important; height: 95mm !important; }
+  .qr svg { display: block; width: 95mm; height: 95mm; shape-rendering: crispEdges; }
   .scan { font-size: 20pt; font-weight: 800; margin-top: 6mm; }
   .foot { font-size: 11pt; color: var(--muted); }
   .foot .url { font-family: monospace; font-size: 9pt; word-break: break-all; }
@@ -40,7 +40,7 @@
 <div id="cartazes"></div>
 
 <script src="config.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
   var cfg = window.PANFLETO_CONFIG;
   var base = cfg.siteUrl || (location.href.split("cartazes.html")[0]);
@@ -60,7 +60,11 @@
       '<div class="foot"><b>Projeto Integrador II — Psicologia UCEFF</b> · ' + cfg.cidades[cod] +
       '<br>Acesso anônimo, sem cadastro.<br><span class="url">' + url + '</span></div>';
     box.appendChild(el);
-    new QRCode(el.querySelector(".qr"), { text: url, width: 512, height: 512, correctLevel: QRCode.CorrectLevel.M });
+    // QR vetorial (SVG): fica nítido em qualquer tamanho de impressão
+    var qr = qrcode(0, "M");
+    qr.addData(url);
+    qr.make();
+    el.querySelector(".qr").innerHTML = qr.createSvgTag({ cellSize: 10, margin: 0, scalable: true });
   });
 </script>
 </body>

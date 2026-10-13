@@ -24,16 +24,26 @@
     if (cidade !== "sem-qr") a.href = a.getAttribute("href").split("?")[0] + "?c=" + cidade;
   });
 
+  // Envia o acesso ao contador. Só marca como contado depois que o contador confirma;
+  // se falhar (sem sinal, limite de acessos do serviço), tenta de novo algumas vezes.
+  function enviarContador(chave, tentativa) {
+    fetch(API + "/hit/" + encodeURIComponent(ns) + "/" + encodeURIComponent(chave), { cache: "no-store", keepalive: true })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        try { sessionStorage.setItem("contou:" + chave, "1"); } catch (e) {}
+      })
+      .catch(function () {
+        if (tentativa < 6) {
+          setTimeout(function () { enviarContador(chave, tentativa + 1); }, 3000 * (tentativa + 1) + Math.random() * 2000);
+        }
+      });
+  }
+
   // Conta cada etapa uma vez por visita (recarregar a página não conta de novo).
   window.registrar = function (etapa) {
     var chave = cidade + "_" + etapa;
-    try {
-      if (sessionStorage.getItem("contou:" + chave)) return;
-      sessionStorage.setItem("contou:" + chave, "1");
-    } catch (e) {}
-    if (cfg.contador) {
-      fetch(API + "/hit/" + encodeURIComponent(ns) + "/" + encodeURIComponent(chave), { keepalive: true }).catch(function () {});
-    }
+    try { if (sessionStorage.getItem("contou:" + chave)) return; } catch (e) {}
+    if (cfg.contador) enviarContador(chave, 0);
     if (cfg.planilha && !local) {
       fetch(cfg.planilha, {
         method: "POST", mode: "no-cors", keepalive: true,
