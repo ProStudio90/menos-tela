@@ -4,7 +4,7 @@
 window.PANFLETO_CONFIG = {
   // Endereço público do site depois de publicado (termine com /).
   // Ex.: "https://seu-usuario.github.io/menos-tela/"
-  siteUrl: "",
+  siteUrl: "https://prostudio90.github.io/menos-tela/",
 
   // Nome do contador de acessos (serviço gratuito Abacus, sem cadastro).
   // Pode deixar como está. Só troque se quiser zerar tudo e começar do zero.
