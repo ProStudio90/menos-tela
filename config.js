@@ -8,7 +8,7 @@ window.PANFLETO_CONFIG = {
 
   // Nome do contador de acessos (serviço gratuito Abacus, sem cadastro).
   // Pode deixar como está. Só troque se quiser zerar tudo e começar do zero.
-  contador: "menostela-pi2-uceff-2026",
+  contador: "menostela-pi2-uceff-2026-v2",
 
   // (Opcional) Endereço do Google Apps Script que grava cada acesso numa planilha,
   // com data e hora. Deixe vazio se não for usar. Ver "COMO PUBLICAR.md".
